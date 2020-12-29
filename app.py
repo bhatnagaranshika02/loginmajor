@@ -41,8 +41,10 @@ def login():
 def logout():
 	pass
 
-@app.route('/register',methods=['POST'])
+@app.route('/register',methods=['POST','GET'])
 def register():
+	if request.method == 'GET':
+		return render_template("signup.html")
 
 	email = request.form["email"]
 	username = request.form["username"]
@@ -66,11 +68,13 @@ def submit_score():
 	score_list[user_id] = obj2
 	return True
 
-@app.route('/forgotpassword',methods=['POST'])
+@app.route('/forgotpassword',methods=['POST','GET'])
 def forgotpassword():
-	username = request.form("username")
-	password = request.form("password")
-	confirmpass = request.form("confirmpass")
+	if request.method == "GET":
+		return render_template("forgotpassword.html")
+	username = request.form["username"]
+	password = request.form["password"]
+	confirmpass = request.form["confirmpass"]
 	if username in users_list:
 		if password == confirmpass:
 			users_list[username].password = password
@@ -95,6 +99,10 @@ def scoreboard():
 	scores.sort()
 	scores = list(map(score_serializer,scores))
 	return jsonify(scores)
+
+@app.route('/aboutus',methods=['GET','POST'])
+def abputus():
+	return render_template("aboutus.html")
 
 	
 
